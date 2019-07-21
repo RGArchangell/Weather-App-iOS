@@ -12,15 +12,15 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var initialCoordinator = MapFieldViewCoordinator!
+    //var initialCoordinator = MapFieldViewCoordinator!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
         
         
         
-        //window?.rootViewController = MapFieldViewController()
-        //window?.makeKeyAndVisible()
+        window?.rootViewController = MapFieldViewController()
+        window?.makeKeyAndVisible()
         
         return true
     }
