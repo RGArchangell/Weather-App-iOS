@@ -9,15 +9,44 @@
 import Foundation
 import UIKit
 
-struct CityModel: Codable {
+struct CityModel {
+    
     var name: String
     var temperature: Float
-    var weatherCondition: String
+    var weather: [WeatherModel]
     var humidity: Float
     var pressure: Float
     var windSpeed: Float
-    var weatherIconID: String
+    var windDegrees: Float
+    var windDirection: String
     var backgroundImage: UIImage?
+    
+    init() {
+        self.name = ""
+        self.temperature = 0.0
+        self.weather = []
+        self.humidity = 0.0
+        self.pressure = 0.0
+        self.windSpeed = 0.0
+        self.windDegrees = 0.0
+        self.windDirection = ""
+        self.backgroundImage = nil
+    }
+
+    private mutating func updateImage() {
+        backgroundImage = getBackgroundImageForWeather(for: weather.first!.condition!)
+    }
+    
+    private mutating func setWindDirection() {
+        windDirection = windDegrees.convertToDirection()
+    }
+    
+    private mutating func convertTempToCelcius() {
+        temperature = temperature - 273.15
+    }
+}
+
+extension CityModel: Decodable {
     
     enum CodingKeys: String, CodingKey {
         case weather
@@ -32,13 +61,9 @@ struct CityModel: Codable {
         case pressure = "pressure"
     }
     
-    enum WeatherCodingKeys: String, CodingKey {
-        case condition = "main"
-        case icon = "icon"
-    }
-    
     enum WindCodingKeys: String, CodingKey {
         case speed = "speed"
+        case direction = "deg"
     }
     
     init(from decoder: Decoder) throws {
@@ -51,56 +76,18 @@ struct CityModel: Codable {
         self.humidity = try mainContainer.decode(Float.self, forKey: .humidity)
         self.pressure = try mainContainer.decode(Float.self, forKey: .pressure)
         
-        let weatherContainer = try container.nestedContainer(keyedBy: WeatherCodingKeys.self, forKey: .weather)
-        self.weatherCondition = try weatherContainer.decode(String.self, forKey: .condition)
-        self.weatherIconID = try weatherContainer.decode(String.self, forKey: .icon)
+        self.weather = try container.decode([WeatherModel].self, forKey: .weather)
         
         let windContainer = try container.nestedContainer(keyedBy: WindCodingKeys.self, forKey: .wind)
         self.windSpeed = try windContainer.decode(Float.self, forKey: .speed)
+        self.windDegrees = try windContainer.decode(Float.self, forKey: .direction)
         
         self.backgroundImage = nil
+        self.windDirection = ""
+        
+        self.updateImage()
+        self.setWindDirection()
+        self.convertTempToCelcius()
     }
     
-    func encode(to encoder: Encoder) throws {
-        
-    }
-}
-
-extension CityModel {
-    func getBackgroundImageForWeather(for weather: String) -> UIImage
-    {
-        switch weather
-        {
-        case "Drizzle":
-            return #imageLiteral(resourceName: "rain")
-        case "Rain":
-            return #imageLiteral(resourceName: "rain")
-        case "Snow":
-            return #imageLiteral(resourceName: "snow")
-        case "Clear":
-            return #imageLiteral(resourceName: "clearSky")
-        case "Clouds":
-            return #imageLiteral(resourceName: "brokenClouds")
-        case "Mist":
-            return #imageLiteral(resourceName: "mist")
-        case "Smoke":
-            return #imageLiteral(resourceName: "mist")
-        case "Haze":
-            return #imageLiteral(resourceName: "mist")
-        case "Dust":
-            return #imageLiteral(resourceName: "snow")
-        case "Fog":
-            return #imageLiteral(resourceName: "mist")
-        case "Sand":
-            return #imageLiteral(resourceName: "snow")
-        case "Ash":
-            return #imageLiteral(resourceName: "snow")
-        case "Squall":
-            return #imageLiteral(resourceName: "thunderstorm")
-        case "Tornado":
-            return #imageLiteral(resourceName: "thunderstorm")
-        default:
-            return #imageLiteral(resourceName: "clearSky")
-        }
-    }
 }

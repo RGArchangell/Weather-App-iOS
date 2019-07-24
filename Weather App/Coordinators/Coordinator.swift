@@ -7,6 +7,7 @@
 //
 
 class Coordinator {
+    
     private(set) var childCoordinators: [Coordinator] = []
     
     func start() {
