@@ -17,7 +17,7 @@ class MapModel {
     private var regionRadius: CLLocationDistance = 10000
 
     private let geocoder = CLGeocoder()
-    private let startLocation = CLLocation(latitude: 21.282778, longitude: -157.829444)
+    private let startLocation = CLLocation(latitude: 37.805778, longitude: -122.287344)
     
     func setNewCity(placemark: CLPlacemark) {
         pickedCity = placemark.locality ?? nil
