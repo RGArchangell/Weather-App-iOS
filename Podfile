@@ -6,6 +6,9 @@ target 'Weather App' do
   use_frameworks!
 
   # Pods for Weather App
-pod 'Alamofire', '~> 4.0'
+pod 'Alamofire'
 pod 'Kingfisher'
+pod 'SwiftLint'
+
+
 end

@@ -13,14 +13,14 @@ extension Float {
         let degrees = Int(value)
         
         value = value.truncatingRemainder(dividingBy: 1)
-        value = value * 100
+        value *= 100
         
         let firstPart = Int(value)
         
         value = value.truncatingRemainder(dividingBy: 1)
-        value = value * 1000
+        value *= 1000
         value = Float(Int(value))
-        value = value / 10
+        value /= 10
         
         let secondPart = value
         return String("\(degrees)°\(firstPart)'\(secondPart)\"")
@@ -42,6 +42,15 @@ extension Float {
         }
         
         return "N"
+    }
+    
+    func convertToMmHg() -> Float {
+        var value = self
+        
+        value /= 1000
+        value *= 747.818
+        
+        return value
     }
     
 }

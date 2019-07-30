@@ -15,56 +15,100 @@ class MapFieldViewModel {
 
     private var modelCoordinator: MapFieldViewCoordinator
     private let dataProvider: DataProvider
+    private var pickedLocation: CLPlacemark?
+    private var currentLocation: CLLocation
+    private var pickedCity: String?
+    private var regionRadius: CLLocationDistance = 10000
+    
+    private let geocoder = CLGeocoder()
+    private let startLocation = CLLocation(latitude: 37.805778, longitude: -122.287344)
     
     // MARK: - initialize
     
     init(modelCoordinator: MapFieldViewCoordinator) {
         self.dataProvider = DataProvider()
         self.modelCoordinator = modelCoordinator
+        pickedLocation = nil
+        pickedCity = nil
+        currentLocation = startLocation
     }
     
     // MARK: - func
     
     func getNameOfTheCity() -> String? {
-        let name = dataProvider.getNameOfCity()
-        return name
+        return pickedCity
+    }
+    
+    func setNewCity(placemark: CLPlacemark) {
+        pickedCity = placemark.locality ?? nil
+    }
+    
+    func setCurentLocation(location: CLLocation) {
+        currentLocation = location
+    }
+    
+    func setRegionRadius(radius: CLLocationDistance) {
+        regionRadius = radius
     }
     
     func getCoordinatesOfCity() -> String {
-        let coords = dataProvider.getCoordsOfCity()
-        return coords
+        var longPart: String
+        var latPart: String
+        
+        var latitude: Float
+        var longitude: Float
+        
+        if Double(currentLocation.coordinate.latitude) < 0.0 {
+            latPart = "S "
+            latitude = Float(currentLocation.coordinate.latitude) * -1.0
+        } else {
+            latPart = "N "
+            latitude = Float(currentLocation.coordinate.latitude)
+        }
+        
+        if Double(currentLocation.coordinate.longitude) < 0.0 {
+            longPart = "W"
+            longitude = Float(currentLocation.coordinate.longitude) * -1.0
+        } else {
+            longPart = "E"
+            longitude = Float(currentLocation.coordinate.longitude)
+        }
+        
+        let resultStringCoord = latitude.convertToCoordinates() + latPart + longitude.convertToCoordinates() + longPart
+        
+        return resultStringCoord
+    }
+    
+    func getNameOfCity() -> String? {
+        return pickedCity
     }
     
     func getStartLocation() -> CLLocation {
-        let startLocation = dataProvider.getStartLocation()
         return startLocation
     }
     
     func getRegionRadius() -> CLLocationDistance {
-        let radius = dataProvider.getStartRadius()
-        return radius
+        return regionRadius
     }
     
-    func setNewPickedLocation(coordinate: CLLocationCoordinate2D, completion: @escaping (Bool) -> Void) {
+    func setNewPickedLocation(coordinate: CLLocationCoordinate2D, completion: @escaping (Result<Int, Error>) -> Void) {
         let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-        dataProvider.setCurrentLocation(location: location)
+        setCurentLocation(location: location)
         
-        location.geocode { placemark, error in
+        geocode(location: location) { placemark, error in
             if (error as? CLError) != nil {
-                completion(true)
+                completion(.failure(error!))
                 return
             } else if let placemark = placemark?.first {
-                DispatchQueue.main.async {
-                    self.dataProvider.setNewCity(placemark: placemark)
-                    completion(false)
+                    self.setNewCity(placemark: placemark)
+                    completion(.success(1))
                     return
-                }
             }
         }
     }
     
     func goToCityForecast() {
-        let cityName = dataProvider.getNameOfCity()!
+        guard let cityName = pickedCity else { return }
         modelCoordinator.goToCityScreen(name: cityName)
     }
     

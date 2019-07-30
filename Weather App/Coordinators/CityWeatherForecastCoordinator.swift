@@ -24,12 +24,19 @@ class CityWeatherForecastCoordinator: Coordinator {
     }
     
     override func start() {
-        cityWeatherService.obtainCityData(cityName: nameOfCity, completion: loadScreen)
+        cityWeatherService.obtainCityData(cityName: nameOfCity, completion: performData)
+    }
+    
+    private func performData(data: Any?) {
+        let city = decodeCityFromData(loadedData: data)
+        loadScreen(cityData: city)
     }
     
     private func loadScreen(cityData: CityModel?) {
         let cityWeatherForecastViewController = CityWeatherForecastViewController()
         cityWeatherForecastViewController.viewModel = CityWeatherForecastViewModel(city: cityData, modelCoordinator: self)
+        
         rootViewController.pushViewController(cityWeatherForecastViewController, animated: true)
     }
+    
 }

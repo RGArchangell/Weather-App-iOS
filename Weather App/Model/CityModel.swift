@@ -34,7 +34,7 @@ struct CityModel {
     }
 
     private mutating func updateImage() {
-        backgroundImage = getBackgroundImageForWeather(for: weather.first!.condition!)
+        backgroundImage = getBackgroundImageForWeather(for: weather.first!.condition)
     }
     
     private mutating func setWindDirection() {
@@ -42,7 +42,11 @@ struct CityModel {
     }
     
     private mutating func convertTempToCelcius() {
-        temperature = temperature - 273.15
+        temperature -= 273.15
+    }
+    
+    private mutating func convertPressureToMmHg() {
+        pressure = pressure.convertToMmHg()
     }
 }
 
@@ -88,6 +92,7 @@ extension CityModel: Decodable {
         self.updateImage()
         self.setWindDirection()
         self.convertTempToCelcius()
+        self.convertPressureToMmHg()
     }
     
 }

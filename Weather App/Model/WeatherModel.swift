@@ -9,11 +9,11 @@
 import Foundation
 
 struct WeatherModel {
-    var condition: String?
+    var condition: String
     var weatherIcon: String
     
     init() {
-        self.condition = nil
+        self.condition = ""
         self.weatherIcon = ""
     }
 }

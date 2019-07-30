@@ -26,11 +26,16 @@ class MapFieldViewCoordinator: Coordinator {
     override func start() {
         let mapFieldViewController = MapFieldViewController()
         mapFieldViewController.viewModel = mapFieldViewModel
+        
+        rootViewController.navigationBar.topItem?.title = "Global Weather"
+        rootViewController.setNavigationBarHidden(true, animated: false)
         rootViewController.setViewControllers([mapFieldViewController], animated: false)
     }
     
     func goToCityScreen(name: String) {
         let cityWeatherForecastCoordinator = CityWeatherForecastCoordinator(rootViewController: rootViewController, nameOfCity: name)
+        
+        rootViewController.navigationBar.topItem?.backBarButtonItem?.title = "Map"
         
         addChildCoordinator(cityWeatherForecastCoordinator)
         cityWeatherForecastCoordinator.start()

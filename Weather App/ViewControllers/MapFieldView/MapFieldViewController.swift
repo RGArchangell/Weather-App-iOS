@@ -13,13 +13,14 @@ class MapFieldViewController: UIViewController {
 
     // MARK: - IBOutlets
     
-    @IBOutlet weak var mapViewMap: MKMapView!
-    @IBOutlet weak var mapViewSearchBar: UISearchBar!
-    @IBOutlet var mapTapGestureRecognizer: UITapGestureRecognizer!
-    @IBOutlet weak var cityMenuView: UIView!
-    @IBOutlet weak var nameOfTheCityInMenu: UILabel!
-    @IBOutlet weak var coordinatesOfTheCityInMenu: UILabel!
-    
+    @IBOutlet private weak var mapViewMap: MKMapView!
+    @IBOutlet private weak var mapViewSearchBar: UISearchBar!
+    @IBOutlet private var mapTapGestureRecognizer: UITapGestureRecognizer!
+    @IBOutlet private weak var cityMenuView: UIView!
+    @IBOutlet private weak var nameOfTheCityInMenu: UILabel!
+    @IBOutlet private weak var coordinatesOfTheCityInMenu: UILabel!
+    @IBOutlet private weak var mapNavigationBar: UINavigationBar!
+
     // MARK: - Variables
     
     private let activityIndicator = UIActivityIndicatorView()
@@ -29,34 +30,35 @@ class MapFieldViewController: UIViewController {
     // MARK: - Private func
     
     private func centerMapOnLocation(location: CLLocation, regionRadius: CLLocationDistance) {
-        let coordinateRegion = MKCoordinateRegion(center: location.coordinate,
-                                                  latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
+        let coordinateRegion = MKCoordinateRegion (center: location.coordinate,
+                                                  latitudinalMeters: regionRadius,
+                                                  longitudinalMeters: regionRadius)
         mapViewMap.setRegion(coordinateRegion, animated: true)
     }
     
     private func setStartViewPreferences() {
         cityMenuView.layer.cornerRadius = 8
         cityMenuView.clipsToBounds = true
+        setCityMenuShadow()
+        cityMenuView.layer.masksToBounds = false
         cityMenuView.isHidden = true
         
-        activityIndicator.style = UIActivityIndicatorView.Style.whiteLarge
-        activityIndicator.center = self.view.center
-        activityIndicator.color = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-        activityIndicator.hidesWhenStopped = true
+        setSearchBarShadow()
+        setActivityIndicator()
+        activityIndicator.stopAnimating()
+        mapNavigationBar.shadowImage = UIImage()
     }
     
-    private func checkResponse(failure: Bool) {
-        if failure {
-            let alertController = UIAlertController(title: "Error", message: "Can't load city. Please, try again", preferredStyle: .alert)
-            let retryAction = UIAlertAction(title: "Ok. I got it", style: .default) { (action) -> Void in
-                alertController.dismiss(animated: true, completion: nil)
-            }
+    private func checkResponse(result: Result<Int, Error>) {
+        switch result {
+        case .failure:
+            showAlert(title: "Error",
+                      message: "Can't load city. Please, try again",
+                      actionText: "Ok. I got it")
             
-            alertController.addAction(retryAction)
-            self.present(alertController, animated: true, completion: nil)
+        case .success:
+            showCityMenu()
         }
-        else
-        {showCityMenu()}
     }
     
     private func showCityMenu() {
@@ -64,26 +66,24 @@ class MapFieldViewController: UIViewController {
         let coords = viewModel.getCoordinatesOfCity()
         
         if name != nil {
-            if cityMenuView.isHidden
-            {cityMenuView.showWithAnimation()}
+            if cityMenuView.isHidden {
+                cityMenuView.showWithAnimation()
+            }
             nameOfTheCityInMenu.text = name
             coordinatesOfTheCityInMenu.text = coords
-        }
-        else {
-            if !cityMenuView.isHidden
-            {cityMenuView.hideWithAnimation()
+        } else {
+            if !cityMenuView.isHidden {
+                cityMenuView.hideWithAnimation()
             }
         }
     }
     
     private func showActivityIndicator() {
         activityIndicator.startAnimating()
-        self.view.addSubview(activityIndicator)
     }
     
     private func hideActivityIndicator() {
         activityIndicator.stopAnimating()
-        activityIndicator.removeFromSuperview()
     }
     
     private func setMapAtStartingLocation() {
@@ -96,14 +96,12 @@ class MapFieldViewController: UIViewController {
     
     override func viewDidLoad() {
         setMapAtStartingLocation()
-        setStartViewPreferences()
         
         mapViewSearchBar.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-        activityIndicator.stopAnimating()
+        setStartViewPreferences()
     }
     
     // MARK: - IBActions
@@ -113,17 +111,17 @@ class MapFieldViewController: UIViewController {
     }
     
     @IBAction func userTappedOnTheMap(_ sender: UITapGestureRecognizer) {
-        if sender.state == .ended {
-            let locationInView = sender.location(in: mapViewMap)
-            let tappedCoordinate = mapViewMap.convert(locationInView , toCoordinateFrom: mapViewMap)
-            
-            self.view.endEditing(true)
-            
-            viewModel.setNewPickedLocation(coordinate: tappedCoordinate, completion: checkResponse)
-            let locationPin = MapPin(coordinate: tappedCoordinate)
-            mapViewMap.removeAnnotations(mapViewMap.annotations)
-            mapViewMap.addAnnotation(locationPin)
-        }
+        guard sender.state == .ended else { return }
+        
+        let locationInView = sender.location(in: mapViewMap)
+        let tappedCoordinate = mapViewMap.convert(locationInView, toCoordinateFrom: mapViewMap)
+        
+        self.view.endEditing(true)
+        
+        viewModel.setNewPickedLocation(coordinate: tappedCoordinate, completion: checkResponse)
+        let locationPin = MapPin(coordinate: tappedCoordinate)
+        mapViewMap.removeAnnotations(mapViewMap.annotations)
+        mapViewMap.addAnnotation(locationPin)
     }
     
     @IBAction func goToCityForecast(_ sender: UIButton) {
@@ -141,50 +139,84 @@ extension MapFieldViewController: UISearchBarDelegate {
         self.view.endEditing(true)
         
         DispatchQueue.main.async {
-            if searchBar.text != "" {
-                UIApplication.shared.beginIgnoringInteractionEvents()
-                self.showActivityIndicator()
+            guard searchBar.text != "" else { return }
                 
-                let searchRequest = MKLocalSearch.Request()
-                searchRequest.naturalLanguageQuery = searchBar.text
+            self.view.isUserInteractionEnabled = false
+            self.showActivityIndicator()
                 
-                let activeSearch = MKLocalSearch(request: searchRequest)
+            let searchRequest = MKLocalSearch.Request()
+            searchRequest.naturalLanguageQuery = searchBar.text
                 
-                activeSearch.start { (response, error) in
-                    self.hideActivityIndicator()
-                    UIApplication.shared.endIgnoringInteractionEvents()
+            let activeSearch = MKLocalSearch(request: searchRequest)
+                
+            activeSearch.start { (response, error) in
+                self.hideActivityIndicator()
+                self.view.isUserInteractionEnabled = true
                     
-                    if response == nil {
-                        self.showMapAlert()
-                    }
-                    else {
-                        let annotations = self.mapViewMap.annotations
-                        self.mapViewMap.removeAnnotations(annotations)
-                        
-                        let coordinates = response?.boundingRegion.center
-                        
-                        let mapPin = MapPin(coordinate: coordinates!)
-                        self.mapViewMap.addAnnotation(mapPin)
-                        
-                        let span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
-                        let region = MKCoordinateRegion(center: coordinates!, span: span)
-                        self.mapViewMap.setRegion(region, animated: true)
-                        
-                        self.viewModel.setNewPickedLocation(coordinate: coordinates!, completion: self.checkResponse)
-                    }
+                if response == nil {
+                    self.showMapAlert()
+                } else {
+                    let annotations = self.mapViewMap.annotations
+                    self.mapViewMap.removeAnnotations(annotations)
+                    
+                    let coordinates = response?.boundingRegion.center
+                    
+                    let mapPin = MapPin(coordinate: coordinates!)
+                    self.mapViewMap.addAnnotation(mapPin)
+                    
+                    let span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
+                    let region = MKCoordinateRegion(center: coordinates!, span: span)
+                    self.mapViewMap.setRegion(region, animated: true)
+                    
+                    self.viewModel.setNewPickedLocation(coordinate: coordinates!, completion: self.checkResponse)
                 }
             }
         }
     }
     
     private func showMapAlert() {
-        let alertController = UIAlertController(title: "Error", message: "Can't find the place. Please, try another", preferredStyle: .alert)
-        let retryAction = UIAlertAction(title: "Ok. I got it", style: .default) { (action) -> Void in
-            alertController.dismiss(animated: true, completion: nil)
-        }
+        showAlert(title: "Error",
+                  message: "Can't find the place. Please, try another",
+                  actionText: "Ok. I got it")
+    }
+    
+}
+
+// MARK: - Shadows and Indicator settings
+
+extension MapFieldViewController {
+    
+    private func setCityMenuShadow() {
+        cityMenuView.layer.shadowColor = UIColor.black.cgColor
+        cityMenuView.layer.shadowOffset = .zero
+        cityMenuView.layer.shadowOpacity = 0.5
+        cityMenuView.layer.shadowRadius = 6.0
+        cityMenuView.layer.shadowPath = UIBezierPath(rect: cityMenuView.bounds).cgPath
+        cityMenuView.layer.shouldRasterize = true
+        cityMenuView.layer.rasterizationScale = UIScreen.main.scale
+    }
+    
+    private func setSearchBarShadow() {
+        mapViewSearchBar.layer.shadowColor = UIColor.black.cgColor
+        mapViewSearchBar.layer.shadowOffset = .zero
+        mapViewSearchBar.layer.shadowOpacity = 0.6
+        mapViewSearchBar.layer.shadowRadius = 5.0
         
-        alertController.addAction(retryAction)
-        self.present(alertController, animated: true, completion: nil)
+        let rectangle = CGRect(x: 0,
+                               y: mapViewSearchBar.frame.height,
+                               width: self.view.frame.width,
+                               height: 1)
+        
+        mapViewSearchBar.layer.shadowPath = UIBezierPath(rect: rectangle).cgPath
+        
+    }
+    
+    private func setActivityIndicator() {
+        activityIndicator.style = UIActivityIndicatorView.Style.whiteLarge
+        activityIndicator.center = self.view.center
+        activityIndicator.color = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        activityIndicator.hidesWhenStopped = true
+        self.view.addSubview(activityIndicator)
     }
     
 }

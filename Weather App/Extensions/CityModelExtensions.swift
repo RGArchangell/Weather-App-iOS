@@ -11,8 +11,9 @@ import UIKit
 extension CityModel {
     
     func getBackgroundImageForWeather(for weather: String) -> UIImage {
-        switch weather
-        {
+        
+        switch weather {
+            
         case "Drizzle":
             return #imageLiteral(resourceName: "rain")
         case "Rain":
@@ -43,6 +44,7 @@ extension CityModel {
             return #imageLiteral(resourceName: "thunderstorm")
         default:
             return #imageLiteral(resourceName: "clearSky")
+            
         }
     }
     

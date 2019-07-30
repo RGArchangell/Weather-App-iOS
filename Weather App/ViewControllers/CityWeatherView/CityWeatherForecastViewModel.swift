@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class CityWeatherForecastViewModel {
     
@@ -14,6 +15,14 @@ class CityWeatherForecastViewModel {
     
     weak var modelCoordinator: CityWeatherForecastCoordinator?
     private var cityForecast: CityModel?
+    
+    var name: String?
+    var temperature: String?
+    var weatherStatus: String?
+    var humidity: String?
+    var pressure: String?
+    var windSpeed: String?
+    var backgroundImage: UIImage?
     
     private let dataProvider: DataProvider?
     
@@ -23,6 +32,16 @@ class CityWeatherForecastViewModel {
         self.dataProvider = DataProvider()
         self.cityForecast = city
         self.modelCoordinator = modelCoordinator
+        
+        guard let city = city else { return }
+        
+        self.name = city.name
+        self.temperature = String(Int(city.temperature))
+        self.weatherStatus = city.weather.first!.condition
+        self.humidity = "\(city.humidity)%"
+        self.pressure = String(format: "%.2f", city.pressure) + "mm Hg"
+        self.windSpeed = city.windDirection + " \(city.windSpeed) m/s"
+        self.backgroundImage = city.backgroundImage!
     }
     
     // MARK: - func

@@ -17,13 +17,18 @@ class CityWeatherService {
         static let error = NSError(domain: "CityWeatherService", code: 0, userInfo: nil)
     }
     
-    func obtainCityData(cityName: String, completion: @escaping (CityModel?) -> Void)
-    {
+    func obtainCityData(cityName: String, completion: @escaping (Any?) -> Void) {
+        
         let url = URL(string: Constants.baseURL)!
-        let parameters = ["q" : cityName,
+        let parameters =  ["q" : cityName,
                           "APPID" : AppId]
         
-        DispatchQueue.main.async {
+        loadData(url: url, parameters: parameters, completion: completion)
+    }
+    
+    func loadData(url: URL, parameters: Dictionary<String, Any>, completion: @escaping (Any?) -> Void) {
+        
+        DispatchQueue.global(qos: .userInitiated).async {
             Alamofire.request(
                 url,
                 method: .get,
@@ -31,19 +36,16 @@ class CityWeatherService {
                 encoding: URLEncoding.default,
                 headers: nil).responseData{ response in
                     
-                    guard let data = response.data else { completion(nil); return }
-
-                    do {
-                        let decoder = JSONDecoder()
-                        let cityData = try decoder.decode(CityModel.self, from: data)
-                        completion(cityData)
+                    switch response.result {
+                    case .success(let data):
+                         completion(data)
                         
-                    } catch let error {
-                        print(error)
-                        completion(nil)
-                        return
+                    case .failure(let error):
+                        completion(error)
                     }
             }
         }
+    
     }
+    
 }
