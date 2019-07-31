@@ -19,13 +19,13 @@ class MapFieldViewController: UIViewController {
     @IBOutlet private weak var cityMenuView: UIView!
     @IBOutlet private weak var nameOfTheCityInMenu: UILabel!
     @IBOutlet private weak var coordinatesOfTheCityInMenu: UILabel!
-    @IBOutlet private weak var mapNavigationBar: UINavigationBar!
-
+    @IBOutlet private weak var mapFieldNavigationBar: UINavigationBar!
+    
     // MARK: - Variables
     
     private let activityIndicator = UIActivityIndicatorView()
     
-    var viewModel: MapFieldViewModel!
+    private var viewModel: MapFieldViewModel
     
     // MARK: - Private func
     
@@ -39,14 +39,12 @@ class MapFieldViewController: UIViewController {
     private func setStartViewPreferences() {
         cityMenuView.layer.cornerRadius = 8
         cityMenuView.clipsToBounds = true
-        setCityMenuShadow()
         cityMenuView.layer.masksToBounds = false
         cityMenuView.isHidden = true
         
         setSearchBarShadow()
-        setActivityIndicator()
         activityIndicator.stopAnimating()
-        mapNavigationBar.shadowImage = UIImage()
+        mapFieldNavigationBar.shadowImage = UIImage()
     }
     
     private func checkResponse(result: Result<Int, Error>) {
@@ -71,6 +69,7 @@ class MapFieldViewController: UIViewController {
             }
             nameOfTheCityInMenu.text = name
             coordinatesOfTheCityInMenu.text = coords
+            setCityMenuShadow()
         } else {
             if !cityMenuView.isHidden {
                 cityMenuView.hideWithAnimation()
@@ -79,6 +78,7 @@ class MapFieldViewController: UIViewController {
     }
     
     private func showActivityIndicator() {
+        setActivityIndicator()
         activityIndicator.startAnimating()
     }
     
@@ -92,6 +92,17 @@ class MapFieldViewController: UIViewController {
         centerMapOnLocation(location: startLocation, regionRadius: startRadius)
     }
     
+    // MARK: - Initialization
+    
+    init(viewModel: MapFieldViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: "MapFieldViewController", bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) is not supported")
+    }
+    
     // MARK: - Override func
     
     override func viewDidLoad() {
@@ -102,6 +113,7 @@ class MapFieldViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         setStartViewPreferences()
+        viewModel.updateViewSettings()
     }
     
     // MARK: - IBActions
@@ -208,7 +220,6 @@ extension MapFieldViewController {
                                height: 1)
         
         mapViewSearchBar.layer.shadowPath = UIBezierPath(rect: rectangle).cgPath
-        
     }
     
     private func setActivityIndicator() {

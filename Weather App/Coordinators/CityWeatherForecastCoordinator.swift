@@ -33,10 +33,26 @@ class CityWeatherForecastCoordinator: Coordinator {
     }
     
     private func loadScreen(cityData: CityModel?) {
-        let cityWeatherForecastViewController = CityWeatherForecastViewController()
-        cityWeatherForecastViewController.viewModel = CityWeatherForecastViewModel(city: cityData, modelCoordinator: self)
+        let viewModel = CityWeatherForecastViewModel(city: cityData)
+        viewModel.delegate = self
+        let cityWeatherForecastViewController = CityWeatherForecastViewController(viewModel: viewModel)
         
         rootViewController.pushViewController(cityWeatherForecastViewController, animated: true)
+    }
+    
+    private func setNavigationBarPreferences() {
+        rootViewController.setNavigationBarHidden(false, animated: false)
+        rootViewController.navigationBar.barStyle = .default
+        rootViewController.navigationBar.isTranslucent = false
+        rootViewController.navigationBar.shadowImage = UIImage()
+    }
+    
+}
+
+extension CityWeatherForecastCoordinator: CityWeatherForecastViewModelDelegate {
+    
+    func cityForecastViewWillAppear() {
+        setNavigationBarPreferences()
     }
     
 }

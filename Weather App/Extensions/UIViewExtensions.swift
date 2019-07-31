@@ -14,7 +14,7 @@ extension UIView {
         
         UIView.animate(withDuration: 0.6, delay: 0, options: [.curveEaseIn],
                        animations: {
-                        self.center.y -= self.bounds.height * 2
+                        self.center.y -= self.bounds.height * 1.5
                         self.layoutIfNeeded()
         }, completion: nil)
         self.isHidden = false
@@ -24,7 +24,7 @@ extension UIView {
         
         UIView.animate(withDuration: 0.6, delay: 0, options: [.curveLinear],
                        animations: {
-                        self.center.y += self.bounds.height * 2
+                        self.center.y += self.bounds.height * 1.5
                         self.layoutIfNeeded()
                         
         },  completion: {(_ completed: Bool) -> Void in

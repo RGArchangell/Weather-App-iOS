@@ -13,8 +13,8 @@ class CityWeatherForecastViewModel {
     
     // MARK: - Variables
     
-    weak var modelCoordinator: CityWeatherForecastCoordinator?
     private var cityForecast: CityModel?
+    private let dataProvider: DataProvider?
     
     var name: String?
     var temperature: String?
@@ -24,14 +24,13 @@ class CityWeatherForecastViewModel {
     var windSpeed: String?
     var backgroundImage: UIImage?
     
-    private let dataProvider: DataProvider?
+    var delegate: CityWeatherForecastViewModelDelegate?
     
     // MARK: - Initialize
     
-    init (city: CityModel?, modelCoordinator: CityWeatherForecastCoordinator) {
+    init (city: CityModel?) {
         self.dataProvider = DataProvider()
         self.cityForecast = city
-        self.modelCoordinator = modelCoordinator
         
         guard let city = city else { return }
         
@@ -56,4 +55,9 @@ class CityWeatherForecastViewModel {
         
         return url
     }
+    
+    func updateViewSettings() {
+        delegate?.cityForecastViewWillAppear()
+    }
+    
 }

@@ -25,7 +25,7 @@ class CityWeatherForecastViewController: UIViewController {
     
     // MARK: - Variables
     
-    var viewModel: CityWeatherForecastViewModel!
+    private var viewModel: CityWeatherForecastViewModel
     
     // MARK: - Private func
     
@@ -54,11 +54,26 @@ class CityWeatherForecastViewController: UIViewController {
                   actionText: "Ok. I got it")
     }
     
+    // MARK: - Initialization
+    
+    init(viewModel: CityWeatherForecastViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: "CityWeatherForecastViewController", bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) is not supported")
+    }
+    
     // MARK: - Override func
     
     override func viewDidLoad() {
         super.viewDidLoad()
         loadInformation()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        viewModel.updateViewSettings()
     }
     
 }

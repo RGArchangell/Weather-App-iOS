@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Weather App/ViewControllers/MapFieldView/MapFieldViewModel.swift"
-            timestampString = "586198182.871979"
+            timestampString = "586257233.282321"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "115"
-            endingLineNumber = "115"
+            startingLineNumber = "119"
+            endingLineNumber = "119"
             landmarkName = "MapFieldViewModel"
             landmarkType = "3">
          </BreakpointContent>

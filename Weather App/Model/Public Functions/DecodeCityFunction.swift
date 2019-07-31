@@ -1,5 +1,5 @@
 //
-//  DecodeCityProtocol.swift
+//  DecodeCityFunction.swift
 //  Weather App
 //
 //  Created by Archangel on 30/07/2019.

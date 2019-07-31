@@ -14,7 +14,7 @@
             <connections>
                 <outlet property="cityMenuView" destination="b5o-qI-Q1i" id="FWQ-Y4-d8v"/>
                 <outlet property="coordinatesOfTheCityInMenu" destination="thg-tF-sKl" id="xAX-fs-BeQ"/>
-                <outlet property="mapNavigationBar" destination="eir-U4-Rnm" id="A1Y-JY-wUB"/>
+                <outlet property="mapFieldNavigationBar" destination="soH-IB-kCX" id="cet-IF-V4Q"/>
                 <outlet property="mapTapGestureRecognizer" destination="JGf-yp-bEl" id="bzQ-Mh-ATj"/>
                 <outlet property="mapViewMap" destination="KX6-YS-TbU" id="SdI-eW-aLU"/>
                 <outlet property="mapViewSearchBar" destination="jNo-LX-coU" id="MRJ-eK-pbP"/>
@@ -34,20 +34,6 @@
                         <outletCollection property="gestureRecognizers" destination="JGf-yp-bEl" appends="YES" id="pfo-dM-fHc"/>
                     </connections>
                 </mapView>
-                <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="Search" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jNo-LX-coU">
-                    <rect key="frame" x="0.0" y="88" width="414" height="56"/>
-                    <textInputTraits key="textInputTraits"/>
-                    <scopeButtonTitles>
-                        <string>Title</string>
-                        <string>Title</string>
-                    </scopeButtonTitles>
-                </searchBar>
-                <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eir-U4-Rnm">
-                    <rect key="frame" x="0.0" y="44" width="414" height="44"/>
-                    <items>
-                        <navigationItem title="Global Weather" id="93a-dN-zcq"/>
-                    </items>
-                </navigationBar>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b5o-qI-Q1i">
                     <rect key="frame" x="16" y="692" width="382" height="154"/>
                     <subviews>
@@ -103,25 +89,39 @@
                         <constraint firstItem="0gI-Uz-IgX" firstAttribute="top" secondItem="b5o-qI-Q1i" secondAttribute="top" constant="20" id="rYo-Tx-ZjR"/>
                     </constraints>
                 </view>
+                <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="soH-IB-kCX">
+                    <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                    <items>
+                        <navigationItem title="Global Weather" id="4o0-MP-6Xe"/>
+                    </items>
+                </navigationBar>
+                <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="Search" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jNo-LX-coU">
+                    <rect key="frame" x="0.0" y="88" width="414" height="56"/>
+                    <textInputTraits key="textInputTraits"/>
+                    <scopeButtonTitles>
+                        <string>Title</string>
+                        <string>Title</string>
+                    </scopeButtonTitles>
+                </searchBar>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="eir-U4-Rnm" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="EOj-wU-aVt"/>
+                <constraint firstItem="soH-IB-kCX" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="1Tg-Gt-MwX"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="top" secondItem="soH-IB-kCX" secondAttribute="top" id="4tp-hQ-WXB"/>
+                <constraint firstItem="jNo-LX-coU" firstAttribute="top" secondItem="soH-IB-kCX" secondAttribute="bottom" id="ElN-vC-oSu"/>
                 <constraint firstItem="KX6-YS-TbU" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="G7Q-5A-j2p"/>
                 <constraint firstItem="b5o-qI-Q1i" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="GiG-BM-wYx"/>
                 <constraint firstItem="jNo-LX-coU" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="K83-wc-DTH"/>
-                <constraint firstItem="eir-U4-Rnm" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="NbJ-bq-9bN"/>
-                <constraint firstItem="jNo-LX-coU" firstAttribute="top" secondItem="eir-U4-Rnm" secondAttribute="bottom" id="O3D-sl-Hxr"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="b5o-qI-Q1i" secondAttribute="trailing" constant="16" id="OnV-EA-NOi"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="b5o-qI-Q1i" secondAttribute="bottom" constant="16" id="POe-My-fes"/>
+                <constraint firstItem="soH-IB-kCX" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="Psp-eU-wfD"/>
                 <constraint firstItem="jNo-LX-coU" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="RFX-28-lvJ"/>
                 <constraint firstAttribute="bottom" secondItem="KX6-YS-TbU" secondAttribute="bottom" id="cfe-hF-M1A"/>
                 <constraint firstItem="KX6-YS-TbU" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="doH-jW-2xY"/>
                 <constraint firstItem="KX6-YS-TbU" firstAttribute="top" secondItem="jNo-LX-coU" secondAttribute="bottom" id="fXB-0L-Arc"/>
-                <constraint firstItem="eir-U4-Rnm" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="ppp-Pg-x3G"/>
+                <constraint firstItem="b5o-qI-Q1i" firstAttribute="top" secondItem="KX6-YS-TbU" secondAttribute="bottom" constant="-204" id="hCU-Z4-Q6g"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
-            <point key="canvasLocation" x="132" y="153.69458128078819"/>
+            <point key="canvasLocation" x="131.8840579710145" y="153.34821428571428"/>
         </view>
         <tapGestureRecognizer id="JGf-yp-bEl">
             <connections>

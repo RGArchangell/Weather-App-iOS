@@ -14,30 +14,45 @@ class MapFieldViewCoordinator: Coordinator {
     let rootViewController: UINavigationController
     lazy var dataProvider = DataProvider()
     
-    lazy var mapFieldViewModel: MapFieldViewModel! = {
-        let viewModel = MapFieldViewModel(modelCoordinator: self)
-        return viewModel
-    }()
-    
     init(rootViewController: UINavigationController) {
         self.rootViewController = rootViewController
     }
     
     override func start() {
-        let mapFieldViewController = MapFieldViewController()
-        mapFieldViewController.viewModel = mapFieldViewModel
+        let mapFieldViewModel = MapFieldViewModel()
+        mapFieldViewModel.delegate = self
+        let mapFieldViewController = MapFieldViewController(viewModel: mapFieldViewModel)
         
-        rootViewController.navigationBar.topItem?.title = "Global Weather"
-        rootViewController.setNavigationBarHidden(true, animated: false)
         rootViewController.setViewControllers([mapFieldViewController], animated: false)
     }
     
     func goToCityScreen(name: String) {
         let cityWeatherForecastCoordinator = CityWeatherForecastCoordinator(rootViewController: rootViewController, nameOfCity: name)
         
-        rootViewController.navigationBar.topItem?.backBarButtonItem?.title = "Map"
-        
         addChildCoordinator(cityWeatherForecastCoordinator)
         cityWeatherForecastCoordinator.start()
     }
+    
+    private func setNavigationBarPreferences() {
+        rootViewController.navigationBar.topItem?.title = "Map"
+        rootViewController.setNavigationBarHidden(true, animated: false)
+    }
+    
+    private func clearCoordinatorChildren() {
+        self.removeAllChildCoordinators()
+    }
+    
+}
+
+extension MapFieldViewCoordinator: MapFieldViewModelDelegate {
+    
+    func didRequestShowWeatherForCity(city: String) {
+        goToCityScreen(name: city)
+    }
+    
+    func mapFieldViewWillAppear() {
+        setNavigationBarPreferences()
+        clearCoordinatorChildren()
+    }
+    
 }

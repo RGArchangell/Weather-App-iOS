@@ -13,7 +13,6 @@ class MapFieldViewModel {
     
     // MARK: - Variables
 
-    private var modelCoordinator: MapFieldViewCoordinator
     private let dataProvider: DataProvider
     private var pickedLocation: CLPlacemark?
     private var currentLocation: CLLocation
@@ -23,11 +22,12 @@ class MapFieldViewModel {
     private let geocoder = CLGeocoder()
     private let startLocation = CLLocation(latitude: 37.805778, longitude: -122.287344)
     
+    var delegate: MapFieldViewModelDelegate?
+    
     // MARK: - initialize
     
-    init(modelCoordinator: MapFieldViewCoordinator) {
+    init() {
         self.dataProvider = DataProvider()
-        self.modelCoordinator = modelCoordinator
         pickedLocation = nil
         pickedCity = nil
         currentLocation = startLocation
@@ -109,7 +109,11 @@ class MapFieldViewModel {
     
     func goToCityForecast() {
         guard let cityName = pickedCity else { return }
-        modelCoordinator.goToCityScreen(name: cityName)
+        delegate?.didRequestShowWeatherForCity(city: cityName)
+    }
+    
+    func updateViewSettings() {
+        delegate?.mapFieldViewWillAppear()
     }
     
 }
