@@ -8,9 +8,9 @@
 
 import Foundation
 
-func decodeCityFromData(loadedData: Any?) -> CityModel? {
+func decodeCityFromData(data: Data?) -> CityModel? {
     
-    guard let data = loadedData as? Data else {return nil}
+    guard let data = data else { return nil }
     
     do {
         let decoder = JSONDecoder()

@@ -34,7 +34,8 @@ struct CityModel {
     }
 
     private mutating func updateImage() {
-        backgroundImage = getBackgroundImageForWeather(for: weather.first!.condition)
+        guard let condition = weather.first?.condition else { return }
+        backgroundImage = getBackgroundImage(for: condition)
     }
     
     private mutating func setWindDirection() {

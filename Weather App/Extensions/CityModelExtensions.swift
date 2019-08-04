@@ -10,37 +10,21 @@ import UIKit
 
 extension CityModel {
     
-    func getBackgroundImageForWeather(for weather: String) -> UIImage {
+    func getBackgroundImage(for weather: String) -> UIImage {
         
         switch weather {
             
-        case "Drizzle":
+        case "Drizzle", "Rain":
             return #imageLiteral(resourceName: "rain")
-        case "Rain":
-            return #imageLiteral(resourceName: "rain")
-        case "Snow":
+        case "Snow", "Dust", "Sand", "Ash":
             return #imageLiteral(resourceName: "snow")
         case "Clear":
             return #imageLiteral(resourceName: "clearSky")
         case "Clouds":
             return #imageLiteral(resourceName: "brokenClouds")
-        case "Mist":
+        case "Mist", "Smoke", "Haze", "Fog":
             return #imageLiteral(resourceName: "mist")
-        case "Smoke":
-            return #imageLiteral(resourceName: "mist")
-        case "Haze":
-            return #imageLiteral(resourceName: "mist")
-        case "Dust":
-            return #imageLiteral(resourceName: "snow")
-        case "Fog":
-            return #imageLiteral(resourceName: "mist")
-        case "Sand":
-            return #imageLiteral(resourceName: "snow")
-        case "Ash":
-            return #imageLiteral(resourceName: "snow")
-        case "Squall":
-            return #imageLiteral(resourceName: "thunderstorm")
-        case "Tornado":
+        case "Squall", "Tornado":
             return #imageLiteral(resourceName: "thunderstorm")
         default:
             return #imageLiteral(resourceName: "clearSky")

@@ -13,29 +13,22 @@ class CityWeatherForecastCoordinator: Coordinator {
     private let rootViewController: UINavigationController
     private let nameOfCity: String
     private let dataProvider: DataProvider
-    private let cityWeatherService: CityWeatherService
     
     init(rootViewController: UINavigationController,
          nameOfCity: String) {
         self.rootViewController = rootViewController
         self.nameOfCity = nameOfCity
         self.dataProvider = DataProvider()
-        self.cityWeatherService = CityWeatherService()
     }
     
     override func start() {
-        cityWeatherService.obtainCityData(cityName: nameOfCity, completion: performData)
+        loadScreen()
     }
     
-    private func performData(data: Any?) {
-        let city = decodeCityFromData(loadedData: data)
-        loadScreen(cityData: city)
-    }
-    
-    private func loadScreen(cityData: CityModel?) {
-        let viewModel = CityWeatherForecastViewModel(city: cityData)
-        viewModel.delegate = self
-        let cityWeatherForecastViewController = CityWeatherForecastViewController(viewModel: viewModel)
+    private func loadScreen() {
+        let viewModel = CityWeatherViewModel(cityName: nameOfCity)
+        let cityWeatherForecastViewController = CityWeatherViewController(viewModel: viewModel)
+        cityWeatherForecastViewController.delegate = self
         
         rootViewController.pushViewController(cityWeatherForecastViewController, animated: true)
     }
@@ -49,7 +42,7 @@ class CityWeatherForecastCoordinator: Coordinator {
     
 }
 
-extension CityWeatherForecastCoordinator: CityWeatherForecastViewModelDelegate {
+extension CityWeatherForecastCoordinator: CityWeatherForecastViewDelegate {
     
     func cityForecastViewWillAppear() {
         setNavigationBarPreferences()

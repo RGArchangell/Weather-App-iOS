@@ -31,12 +31,13 @@ class Coordinator {
     }
     
     func removeAllChildCoordinatorsWith<T>(type: T.Type) {
-        childCoordinators = childCoordinators.filter { $0 is T  == false }
+        childCoordinators = childCoordinators.filter { $0 is T == false }
     }
     
     func removeAllChildCoordinators() {
         childCoordinators.removeAll()
     }
+    
 }
 
 extension Coordinator: Equatable {

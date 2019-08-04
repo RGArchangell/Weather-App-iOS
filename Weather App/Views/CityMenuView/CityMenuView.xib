@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CityMenuView" customModule="Weather_App" customModuleProvider="target">
+            <connections>
+                <outlet property="closeButton" destination="67c-V7-BVY" id="HPz-fa-kEz"/>
+                <outlet property="contentView" destination="iN0-l3-epB" id="l0m-KP-C3Y"/>
+                <outlet property="coordinates" destination="sSb-mu-sep" id="HOb-Jg-Bh0"/>
+                <outlet property="name" destination="lzE-Tx-Ei1" id="9nU-Yc-q1U"/>
+                <outlet property="showWeatherButton" destination="1hb-Jd-6bm" id="KsR-9a-P1f"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="343" height="154"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="67c-V7-BVY">
+                    <rect key="frame" x="311" y="20" width="12" height="12"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="12" id="W9f-B1-IhR"/>
+                        <constraint firstAttribute="width" constant="12" id="z9F-75-HhG"/>
+                    </constraints>
+                    <state key="normal" image="closeButton"/>
+                    <connections>
+                        <action selector="closeButtonTapped:" destination="-1" eventType="touchUpInside" id="MPe-CT-t0j"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" alpha="0.80000001192092896" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Coordinates" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sSb-mu-sep">
+                    <rect key="frame" x="16" y="44" width="87.5" height="18"/>
+                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                    <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lzE-Tx-Ei1">
+                    <rect key="frame" x="16" y="16" width="54" height="24"/>
+                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1hb-Jd-6bm">
+                    <rect key="frame" x="40" y="97" width="263" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="263" id="1nb-8t-dDg"/>
+                        <constraint firstAttribute="height" constant="44" id="yCk-QJ-y1P"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <state key="normal" image="showWeatherButton"/>
+                    <connections>
+                        <action selector="showCityButtonTapped:" destination="-1" eventType="touchUpInside" id="2h6-ZM-scd"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="67c-V7-BVY" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="20" id="0JO-mu-bzY"/>
+                <constraint firstAttribute="bottom" secondItem="1hb-Jd-6bm" secondAttribute="bottom" constant="13" id="0RX-rd-eln"/>
+                <constraint firstItem="lzE-Tx-Ei1" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="EuC-PP-ppv"/>
+                <constraint firstItem="1hb-Jd-6bm" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="IHR-u5-gAB"/>
+                <constraint firstItem="sSb-mu-sep" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="OgK-Un-2Gh"/>
+                <constraint firstItem="lzE-Tx-Ei1" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="16" id="eEF-Ox-KOJ"/>
+                <constraint firstAttribute="trailing" secondItem="67c-V7-BVY" secondAttribute="trailing" constant="20" id="f2U-xk-S5S"/>
+                <constraint firstItem="67c-V7-BVY" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="lzE-Tx-Ei1" secondAttribute="trailing" constant="20" id="suO-CI-hin"/>
+                <constraint firstItem="sSb-mu-sep" firstAttribute="top" secondItem="lzE-Tx-Ei1" secondAttribute="bottom" constant="4" id="xls-Bg-yIi"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <point key="canvasLocation" x="85.507246376811594" y="190.17857142857142"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="closeButton" width="12" height="12"/>
+        <image name="showWeatherButton" width="491" height="84"/>
+    </resources>
+</document>

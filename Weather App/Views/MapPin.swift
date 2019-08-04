@@ -9,7 +9,7 @@
 import Foundation
 import MapKit
 
-class MapPin : NSObject, MKAnnotation {
+class MapPin: NSObject, MKAnnotation {
     
     var coordinate: CLLocationCoordinate2D
 

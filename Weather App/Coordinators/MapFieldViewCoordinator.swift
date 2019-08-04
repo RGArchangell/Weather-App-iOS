@@ -22,12 +22,15 @@ class MapFieldViewCoordinator: Coordinator {
         let mapFieldViewModel = MapFieldViewModel()
         mapFieldViewModel.delegate = self
         let mapFieldViewController = MapFieldViewController(viewModel: mapFieldViewModel)
+        mapFieldViewController.delegate = self
         
         rootViewController.setViewControllers([mapFieldViewController], animated: false)
     }
     
     func goToCityScreen(name: String) {
-        let cityWeatherForecastCoordinator = CityWeatherForecastCoordinator(rootViewController: rootViewController, nameOfCity: name)
+        let cityWeatherForecastCoordinator = CityWeatherForecastCoordinator(
+            rootViewController: rootViewController,
+            nameOfCity: name)
         
         addChildCoordinator(cityWeatherForecastCoordinator)
         cityWeatherForecastCoordinator.start()
@@ -50,9 +53,12 @@ extension MapFieldViewCoordinator: MapFieldViewModelDelegate {
         goToCityScreen(name: city)
     }
     
-    func mapFieldViewWillAppear() {
-        setNavigationBarPreferences()
-        clearCoordinatorChildren()
+}
+
+extension MapFieldViewCoordinator: MapFieldViewDelegate {
+    
+    func viewWillAppear() {
+         setNavigationBarPreferences()
     }
     
 }

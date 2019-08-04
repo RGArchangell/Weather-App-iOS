@@ -9,6 +9,8 @@
 import Foundation
 import MapKit
 
-public func geocode(location: CLLocation, completion: @escaping (_ placemark: [CLPlacemark]?, _ error: Error?) -> Void)  {
-    CLGeocoder().reverseGeocodeLocation(location, completionHandler: completion)
+struct Geocoder {
+    static func geocode(location: CLLocation, completion: @escaping (_ placemark: [CLPlacemark]?, _ error: Error?) -> Void) {
+        CLGeocoder().reverseGeocodeLocation(location, completionHandler: completion)
+    }
 }

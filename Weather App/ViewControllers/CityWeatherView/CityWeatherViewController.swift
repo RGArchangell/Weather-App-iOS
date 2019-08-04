@@ -1,5 +1,5 @@
 //
-//  CityWeatherForecastViewController.swift
+//  CityWeatherViewController.swift
 //  Weather App
 //
 //  Created by Archangel on 20/07/2019.
@@ -9,8 +9,8 @@
 import UIKit
 import Kingfisher
 
-class CityWeatherForecastViewController: UIViewController {
-
+class CityWeatherViewController: UIViewController {
+    
     // MARK: - IBOutlets
     
     @IBOutlet private weak var informationView: UIView!
@@ -25,16 +25,17 @@ class CityWeatherForecastViewController: UIViewController {
     
     // MARK: - Variables
     
-    private var viewModel: CityWeatherForecastViewModel
+    private let activityIndicator = UIActivityIndicatorView()
+    
+    private var viewModel: CityWeatherViewModel
+    
+    weak var delegate: CityWeatherForecastViewDelegate?
     
     // MARK: - Private func
     
-    private func loadInformation() {
-        guard viewModel.getCity() != nil else { showError(); return }
-        displayWeatherInfo()
-    }
-
     private func displayWeatherInfo() {
+        self.hideActivityIndicator(indicator: activityIndicator)
+        
         cityName.text = viewModel.name
         temperature.text = viewModel.temperature
         weatherStatus.text = viewModel.weatherStatus
@@ -54,9 +55,18 @@ class CityWeatherForecastViewController: UIViewController {
                   actionText: "Ok. I got it")
     }
     
+    func checkData(result: Result<Int, Error>) {
+        switch result {
+        case .success:
+            displayWeatherInfo()
+        case .failure:
+            showError()
+        }
+    }
+    
     // MARK: - Initialization
     
-    init(viewModel: CityWeatherForecastViewModel) {
+    init(viewModel: CityWeatherViewModel) {
         self.viewModel = viewModel
         super.init(nibName: "CityWeatherForecastViewController", bundle: nil)
     }
@@ -67,13 +77,17 @@ class CityWeatherForecastViewController: UIViewController {
     
     // MARK: - Override func
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        loadInformation()
+    override func viewWillAppear(_ animated: Bool) {
+        self.showActivityIndicator(indicator: activityIndicator)
+        
+        delegate?.cityForecastViewWillAppear()
+        viewModel.loadData()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        viewModel.updateViewSettings()
-    }
+}
+
+protocol CityWeatherForecastViewDelegate: class {
+    
+    func cityForecastViewWillAppear()
     
 }
