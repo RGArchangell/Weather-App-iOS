@@ -43,7 +43,7 @@ class MapFieldViewModel {
     
     weak var delegate: MapFieldViewModelDelegate?
     
-    // MARK: - initialize
+    // MARK: - Initialize
     
     init() {
         self.dataProvider = DataProvider()
@@ -52,7 +52,7 @@ class MapFieldViewModel {
         currentLocation = startLocation
     }
     
-    // MARK: - func
+    // MARK: - Func
     
     func setNewCity(placemark: CLPlacemark) {
         let newCity = placemark.locality ?? nil
@@ -82,15 +82,16 @@ class MapFieldViewModel {
         let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         self.location = location
         
-        Geocoder.geocode(location: location) { placemark, error in
-            if (error as? CLError) != nil {
-                guard let fail = error else { return }
-                completion(.failure(fail))
-                return
-            } else if let placemark = placemark?.first {
-                    self.setNewCity(placemark: placemark)
-                    completion(.success(1))
-                    return
+        Geocoder.geocode(location: location) { result in
+            switch result {
+            case .success(let placemark):
+                guard let placemark = placemark else { return }
+                    
+                self.setNewCity(placemark: placemark)
+                completion(.success(1))
+                
+            case .failure(let error):
+                completion(.failure(error))
             }
         }
     }
@@ -102,16 +103,16 @@ class MapFieldViewModel {
     
 }
 
-protocol MapFieldViewModelDelegate: class {
-    
-    func didRequestShowWeatherForCity(city: String)
-    
-}
-
 extension MapFieldViewModel: CityMenuViewDelegate {
     
     func didRequestInformationOfCity() {
         goToCityForecast()
     }
+    
+}
+
+protocol MapFieldViewModelDelegate: class {
+    
+    func didRequestShowWeatherForCity(city: String)
     
 }

@@ -13,7 +13,6 @@ class CityWeatherViewModel {
     
     // MARK: - Variables
     
-    private var cityForecast: CityModel?
     private let dataProvider: DataProvider?
     private let cityWeatherService: CityWeatherService
     
@@ -23,6 +22,7 @@ class CityWeatherViewModel {
     var humidity: String?
     var pressure: String?
     var windSpeed: String?
+    var iconID: String?
     var backgroundImage: UIImage?
     
     weak var delegate: CityWeatherViewModelDelegate?
@@ -31,7 +31,6 @@ class CityWeatherViewModel {
     
     init(cityName: String) {
         self.dataProvider = DataProvider()
-        self.cityForecast = nil
         self.cityWeatherService = CityWeatherService()
         
         self.name = cityName
@@ -40,15 +39,19 @@ class CityWeatherViewModel {
         self.humidity = nil
         self.pressure = nil
         self.windSpeed = nil
+        self.iconID = nil
         self.backgroundImage = nil
     }
+    
+    // MARK: - Private func
     
     private func perfomData(result: RequestResult<CityModel>) {
         switch result {
         case .sucess(let city):
             guard
                 let weatherStatus = city.weather.first?.condition,
-                let backgroundImage = city.backgroundImage
+                let backgroundImage = city.backgroundImage,
+                let icon = city.weather.first?.weatherIcon
                 else { return }
             
             self.name = city.name
@@ -57,6 +60,7 @@ class CityWeatherViewModel {
             self.humidity = "\(city.humidity)%"
             self.pressure = String(format: "%.2f", city.pressure) + "mm Hg"
             self.windSpeed = city.windDirection + " \(city.windSpeed) m/s"
+            self.iconID = icon
             self.backgroundImage = backgroundImage
             
             delegate?.dataWasUpdated(result: .success(1))
@@ -66,7 +70,7 @@ class CityWeatherViewModel {
         }
     }
     
-    // MARK: - func
+    // MARK: - Func
     
     func loadData() {
         guard let name = name else { return }
@@ -74,13 +78,9 @@ class CityWeatherViewModel {
                                           completion: perfomData)
     }
     
-    func getCity() -> CityModel? {
-        return cityForecast
-    }
-    
     func getIconURL() -> URL? {
         
-        guard let iconID = cityForecast?.weather.first?.weatherIcon else { return nil }
+        guard let iconID = iconID else { return nil }
         let urlString = "http://openweathermap.org/img/wn/" + iconID + "@2x.png"
         guard let url = URL(string: urlString) else { return nil }
         

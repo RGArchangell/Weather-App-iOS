@@ -14,6 +14,8 @@ class CityWeatherForecastCoordinator: Coordinator {
     private let nameOfCity: String
     private let dataProvider: DataProvider
     
+    weak var delegate: CityWeatherForecastCoordinatorDelegate?
+    
     init(rootViewController: UINavigationController,
          nameOfCity: String) {
         self.rootViewController = rootViewController
@@ -27,10 +29,10 @@ class CityWeatherForecastCoordinator: Coordinator {
     
     private func loadScreen() {
         let viewModel = CityWeatherViewModel(cityName: nameOfCity)
-        let cityWeatherForecastViewController = CityWeatherViewController(viewModel: viewModel)
-        cityWeatherForecastViewController.delegate = self
+        let cityWeatherViewController = CityWeatherViewController(viewModel: viewModel)
+        cityWeatherViewController.delegate = self
         
-        rootViewController.pushViewController(cityWeatherForecastViewController, animated: true)
+        rootViewController.pushViewController(cityWeatherViewController, animated: true)
     }
     
     private func setNavigationBarPreferences() {
@@ -40,6 +42,10 @@ class CityWeatherForecastCoordinator: Coordinator {
         rootViewController.navigationBar.shadowImage = UIImage()
     }
     
+    private func viewDidDisappear() {
+        delegate?.removeCoordinator(childCoordinator: self)
+    }
+    
 }
 
 extension CityWeatherForecastCoordinator: CityWeatherForecastViewDelegate {
@@ -47,5 +53,15 @@ extension CityWeatherForecastCoordinator: CityWeatherForecastViewDelegate {
     func cityForecastViewWillAppear() {
         setNavigationBarPreferences()
     }
+    
+    func cityForecastViewDidDisappear() {
+        viewDidDisappear()
+    }
+    
+}
+
+protocol CityWeatherForecastCoordinatorDelegate: class {
+    
+    func removeCoordinator(childCoordinator: Coordinator)
     
 }

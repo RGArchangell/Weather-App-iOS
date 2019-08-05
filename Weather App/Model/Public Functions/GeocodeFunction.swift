@@ -10,7 +10,16 @@ import Foundation
 import MapKit
 
 struct Geocoder {
-    static func geocode(location: CLLocation, completion: @escaping (_ placemark: [CLPlacemark]?, _ error: Error?) -> Void) {
-        CLGeocoder().reverseGeocodeLocation(location, completionHandler: completion)
+    static func geocode(location: CLLocation, completion: @escaping (Result<CLPlacemark?, Error>) -> Void) {
+        CLGeocoder().reverseGeocodeLocation(location) { placemarks, error in
+            if (error as? CLError) != nil {
+                guard let fail = error else { return }
+                completion(.failure(fail))
+                return
+            } else if let placemark = placemarks?.first {
+                completion(.success(placemark))
+                return
+            }
+        }
     }
 }

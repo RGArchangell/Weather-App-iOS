@@ -41,8 +41,8 @@ class MapFieldViewCoordinator: Coordinator {
         rootViewController.setNavigationBarHidden(true, animated: false)
     }
     
-    private func clearCoordinatorChildren() {
-        self.removeAllChildCoordinators()
+    private func removeCoordinatorChildren(childCoordinator: Coordinator) {
+        self.removeChildCoordinator(childCoordinator)
     }
     
 }
@@ -55,10 +55,18 @@ extension MapFieldViewCoordinator: MapFieldViewModelDelegate {
     
 }
 
-extension MapFieldViewCoordinator: MapFieldViewDelegate {
+extension MapFieldViewCoordinator: MapFieldViewControllerDelegate {
     
     func viewWillAppear() {
          setNavigationBarPreferences()
+    }
+    
+}
+
+extension MapFieldViewCoordinator: CityWeatherForecastCoordinatorDelegate {
+
+    func removeCoordinator(childCoordinator: Coordinator) {
+        removeChildCoordinator(childCoordinator)
     }
     
 }

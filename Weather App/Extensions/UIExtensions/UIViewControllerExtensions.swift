@@ -23,10 +23,12 @@ extension UIViewController {
     
     private func setActivityIndicator(indicator activityIndicator: UIActivityIndicatorView) {
         activityIndicator.style = UIActivityIndicatorView.Style.whiteLarge
-        activityIndicator.center = self.view.center
         activityIndicator.color = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         activityIndicator.hidesWhenStopped = true
-        self.view.addSubview(activityIndicator)
+        
+        guard let centerPoint = UIApplication.shared.keyWindow?.center else { return }
+        activityIndicator.center = centerPoint
+        UIApplication.shared.keyWindow?.addSubview(activityIndicator)
     }
     
     func showActivityIndicator(indicator activityIndicator: UIActivityIndicatorView) {
@@ -36,6 +38,7 @@ extension UIViewController {
     
     func hideActivityIndicator(indicator activityIndicator: UIActivityIndicatorView) {
         activityIndicator.stopAnimating()
+        activityIndicator.removeFromSuperview()
     }
     
 }

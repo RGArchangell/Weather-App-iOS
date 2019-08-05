@@ -12,9 +12,11 @@
 		841E1F9322E727E600B5C626 /* CityWeatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841E1F9222E727E600B5C626 /* CityWeatherService.swift */; };
 		841E1F9A22E72EBC00B5C626 /* AppId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841E1F9922E72EBC00B5C626 /* AppId.swift */; };
 		841E1F9E22E85C7100B5C626 /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841E1F9D22E85C7100B5C626 /* WeatherModel.swift */; };
-		842BE18422F6C8E100B279C7 /* CityWeatherForecastViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 842BE18322F6C8E100B279C7 /* CityWeatherForecastViewController.xib */; };
 		842BE18622F6C90A00B279C7 /* CityWeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842BE18522F6C90A00B279C7 /* CityWeatherViewController.swift */; };
-		842BE18822F6C9D500B279C7 /* CityWeatherViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842BE18722F6C9D500B279C7 /* CityWeatherViewControllerExtensions.swift */; };
+		842BE18A22F6D2E700B279C7 /* CityWeatherViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 842BE18922F6D2E700B279C7 /* CityWeatherViewController.xib */; };
+		842BE18C22F6D69500B279C7 /* MapFieldView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 842BE18B22F6D69500B279C7 /* MapFieldView.xib */; };
+		842BE18E22F7138B00B279C7 /* MapFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842BE18D22F7138B00B279C7 /* MapFieldView.swift */; };
+		842BE19322F7F82400B279C7 /* UISearchBarExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842BE19222F7F82400B279C7 /* UISearchBarExtensions.swift */; };
 		84613F0B22F0711700C82EC4 /* GeocodeFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84613F0A22F0711700C82EC4 /* GeocodeFunction.swift */; };
 		84613F0E22F07C8E00C82EC4 /* DecodeCityFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84613F0D22F07C8E00C82EC4 /* DecodeCityFunction.swift */; };
 		84613F1522F0B11400C82EC4 /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84613F1422F0B11400C82EC4 /* UIViewControllerExtensions.swift */; };
@@ -47,9 +49,11 @@
 		841E1F9222E727E600B5C626 /* CityWeatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityWeatherService.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		841E1F9922E72EBC00B5C626 /* AppId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppId.swift; sourceTree = "<group>"; };
 		841E1F9D22E85C7100B5C626 /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
-		842BE18322F6C8E100B279C7 /* CityWeatherForecastViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CityWeatherForecastViewController.xib; path = ../../../../../../../.Trash/CityWeatherForecastViewController.xib; sourceTree = "<group>"; };
 		842BE18522F6C90A00B279C7 /* CityWeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityWeatherViewController.swift; sourceTree = "<group>"; };
-		842BE18722F6C9D500B279C7 /* CityWeatherViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityWeatherViewControllerExtensions.swift; sourceTree = "<group>"; };
+		842BE18922F6D2E700B279C7 /* CityWeatherViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CityWeatherViewController.xib; sourceTree = "<group>"; };
+		842BE18B22F6D69500B279C7 /* MapFieldView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MapFieldView.xib; sourceTree = "<group>"; };
+		842BE18D22F7138B00B279C7 /* MapFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapFieldView.swift; sourceTree = "<group>"; };
+		842BE19222F7F82400B279C7 /* UISearchBarExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UISearchBarExtensions.swift; sourceTree = "<group>"; };
 		84613F0A22F0711700C82EC4 /* GeocodeFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodeFunction.swift; sourceTree = "<group>"; };
 		84613F0D22F07C8E00C82EC4 /* DecodeCityFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeCityFunction.swift; sourceTree = "<group>"; };
 		84613F1422F0B11400C82EC4 /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensions.swift; sourceTree = "<group>"; };
@@ -103,6 +107,42 @@
 				841E1F9922E72EBC00B5C626 /* AppId.swift */,
 			);
 			path = Service;
+			sourceTree = "<group>";
+		};
+		842BE18F22F7139500B279C7 /* MapFieldView */ = {
+			isa = PBXGroup;
+			children = (
+				842BE18B22F6D69500B279C7 /* MapFieldView.xib */,
+				842BE18D22F7138B00B279C7 /* MapFieldView.swift */,
+			);
+			path = MapFieldView;
+			sourceTree = "<group>";
+		};
+		842BE19422F7F84C00B279C7 /* UIExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				84DA543922E5C8C2006FAF14 /* UIViewExtensions.swift */,
+				84613F1422F0B11400C82EC4 /* UIViewControllerExtensions.swift */,
+				842BE19222F7F82400B279C7 /* UISearchBarExtensions.swift */,
+			);
+			path = UIExtensions;
+			sourceTree = "<group>";
+		};
+		842BE19522F7F85D00B279C7 /* ClassExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				84DA544B22E5E549006FAF14 /* FloatExtensions.swift */,
+				84FF1BE822F3D24600B2EB42 /* OptionalCollextionExtension.swift */,
+			);
+			path = ClassExtensions;
+			sourceTree = "<group>";
+		};
+		842BE19622F7F86B00B279C7 /* CustomClassExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				84DA543022E47C2B006FAF14 /* CityModelExtensions.swift */,
+			);
+			path = CustomClassExtensions;
 			sourceTree = "<group>";
 		};
 		84613F0C22F0712A00C82EC4 /* Public Functions */ = {
@@ -180,9 +220,9 @@
 		84DA541E22E363F5006FAF14 /* CityWeatherView */ = {
 			isa = PBXGroup;
 			children = (
-				842BE18322F6C8E100B279C7 /* CityWeatherForecastViewController.xib */,
 				84DA541C22E363ED006FAF14 /* CityWeatherViewModel.swift */,
 				842BE18522F6C90A00B279C7 /* CityWeatherViewController.swift */,
+				842BE18922F6D2E700B279C7 /* CityWeatherViewController.xib */,
 			);
 			path = CityWeatherView;
 			sourceTree = "<group>";
@@ -211,12 +251,9 @@
 		84DA543222E47C45006FAF14 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				84DA543022E47C2B006FAF14 /* CityModelExtensions.swift */,
-				84DA543922E5C8C2006FAF14 /* UIViewExtensions.swift */,
-				84DA544B22E5E549006FAF14 /* FloatExtensions.swift */,
-				84613F1422F0B11400C82EC4 /* UIViewControllerExtensions.swift */,
-				84FF1BE822F3D24600B2EB42 /* OptionalCollextionExtension.swift */,
-				842BE18722F6C9D500B279C7 /* CityWeatherViewControllerExtensions.swift */,
+				842BE19622F7F86B00B279C7 /* CustomClassExtensions */,
+				842BE19422F7F84C00B279C7 /* UIExtensions */,
+				842BE19522F7F85D00B279C7 /* ClassExtensions */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -226,6 +263,7 @@
 			children = (
 				84DA543522E5B966006FAF14 /* MapPin.swift */,
 				84FF1BF822F405D800B2EB42 /* CityMenuView */,
+				842BE18F22F7139500B279C7 /* MapFieldView */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -309,10 +347,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				842BE18422F6C8E100B279C7 /* CityWeatherForecastViewController.xib in Resources */,
 				84FF1BFA22F4127700B2EB42 /* CityMenuView.xib in Resources */,
 				84DA540D22E2BFD2006FAF14 /* MapFieldViewController.xib in Resources */,
 				84DA543822E5BF00006FAF14 /* Launch Screen.storyboard in Resources */,
+				842BE18A22F6D2E700B279C7 /* CityWeatherViewController.xib in Resources */,
+				842BE18C22F6D69500B279C7 /* MapFieldView.xib in Resources */,
 				84D8E67A22E07DA200A0891B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -394,13 +433,14 @@
 				84DA544C22E5E549006FAF14 /* FloatExtensions.swift in Sources */,
 				84DA540C22E2BFD2006FAF14 /* MapFieldViewController.swift in Sources */,
 				84FF1BE922F3D24600B2EB42 /* OptionalCollextionExtension.swift in Sources */,
-				842BE18822F6C9D500B279C7 /* CityWeatherViewControllerExtensions.swift in Sources */,
 				841E1F9A22E72EBC00B5C626 /* AppId.swift in Sources */,
 				84DA542622E3E0A7006FAF14 /* MapFieldViewCoordinator.swift in Sources */,
 				84DA541622E34D6C006FAF14 /* Coordinator.swift in Sources */,
 				84613F0E22F07C8E00C82EC4 /* DecodeCityFunction.swift in Sources */,
 				8467BDF822F34E0D00431CE2 /* MainCoordinator.swift in Sources */,
+				842BE19322F7F82400B279C7 /* UISearchBarExtensions.swift in Sources */,
 				841E1F9322E727E600B5C626 /* CityWeatherService.swift in Sources */,
+				842BE18E22F7138B00B279C7 /* MapFieldView.swift in Sources */,
 				84DA543622E5B966006FAF14 /* MapPin.swift in Sources */,
 				84DA543A22E5C8C2006FAF14 /* UIViewExtensions.swift in Sources */,
 				842BE18622F6C90A00B279C7 /* CityWeatherViewController.swift in Sources */,

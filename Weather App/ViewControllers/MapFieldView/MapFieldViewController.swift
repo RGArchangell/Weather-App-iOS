@@ -13,44 +13,27 @@ class MapFieldViewController: UIViewController {
 
     // MARK: - IBOutlets
     
-    @IBOutlet private weak var mapViewMap: MKMapView!
+    @IBOutlet private weak var mapView: MapFieldView!
     @IBOutlet private weak var mapViewSearchBar: UISearchBar!
-    @IBOutlet private var mapTapGestureRecognizer: UITapGestureRecognizer!
     @IBOutlet private weak var mapFieldNavigationBar: UINavigationBar!
     
     // MARK: - Variables
     
     private let activityIndicator = UIActivityIndicatorView()
+    
     private var viewModel: MapFieldViewModel
     private var menu: CityMenuView
+    private var workItemForSearch: DispatchWorkItem?
     
-    weak var delegate: MapFieldViewDelegate?
+    weak var delegate: MapFieldViewControllerDelegate?
     
     // MARK: - Private func
-    
-    private func centerMapOnLocation(location: CLLocation, regionRadius: CLLocationDistance) {
-        let coordinateRegion = MKCoordinateRegion (center: location.coordinate,
-                                                   latitudinalMeters: regionRadius,
-                                                   longitudinalMeters: regionRadius)
-        mapViewMap.setRegion(coordinateRegion, animated: true)
-    }
     
     private func setStartViewPreferences() {
         setSearchBarShadow()
         setMenuPreferences()
         mapFieldNavigationBar.shadowImage = UIImage()
-    }
-    
-    private func checkResponse(result: Result<Int, Error>) {
-        switch result {
-        case .failure:
-            showAlert(title: "Error",
-                      message: "Can't load city. Please, try again",
-                      actionText: "Ok. I got it")
-            
-        case .success:
-            showCityMenu()
-        }
+        mapView.delegate = self
     }
     
     private func showCityMenu() {
@@ -60,21 +43,6 @@ class MapFieldViewController: UIViewController {
         } else {
             menu.updateInfo(with: viewModel)
         }
-    }
-    
-    private func setMapAtStartingLocation() {
-        let startLocation = viewModel.startLocation
-        let startRadius = viewModel.regionRad
-        centerMapOnLocation(location: startLocation, regionRadius: startRadius)
-    }
-    
-    private func updateMap(coordinates: CLLocationCoordinate2D) {
-        let mapPin = MapPin(coordinate: coordinates)
-        self.mapViewMap.addAnnotation(mapPin)
-        
-        let span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
-        let region = MKCoordinateRegion(center: coordinates, span: span)
-        self.mapViewMap.setRegion(region, animated: true)
     }
     
     // MARK: - Initialization
@@ -92,7 +60,7 @@ class MapFieldViewController: UIViewController {
     // MARK: - Override func
     
     override func viewDidLoad() {
-        setMapAtStartingLocation()
+        mapView.setMapAtStartingLocation(viewModel: viewModel)
         mapViewSearchBar.delegate = self
     }
     
@@ -100,23 +68,7 @@ class MapFieldViewController: UIViewController {
         setStartViewPreferences()
         delegate?.viewWillAppear()
     }
-    
-    // MARK: - IBActions
-    
-    @IBAction private func userTappedOnTheMap(_ sender: UITapGestureRecognizer) {
-        guard sender.state == .ended else { return }
-        
-        let locationInView = sender.location(in: mapViewMap)
-        let tappedCoordinate = mapViewMap.convert(locationInView, toCoordinateFrom: mapViewMap)
-        
-        self.view.endEditing(true)
-        
-        viewModel.setNewPickedLocation(coordinate: tappedCoordinate, completion: checkResponse)
-        let locationPin = MapPin(coordinate: tappedCoordinate)
-        mapViewMap.removeAnnotations(mapViewMap.annotations)
-        mapViewMap.addAnnotation(locationPin)
-    }
-    
+
 }
 
 // MARK: - Extension for search bar
@@ -126,31 +78,38 @@ extension MapFieldViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         self.view.endEditing(true)
         
-        DispatchQueue.main.async {
-            guard !searchBar.text.isEmptyOrNil else { return }
+        guard !searchBar.text.isEmptyOrNil else { return }
                 
-            self.view.isUserInteractionEnabled = false
-            self.showActivityIndicator(indicator: self.activityIndicator)
+        self.view.isUserInteractionEnabled = false
+        self.showActivityIndicator(indicator: self.activityIndicator)
                 
-            let searchRequest = MKLocalSearch.Request()
-            searchRequest.naturalLanguageQuery = searchBar.text
+        let searchRequest = MKLocalSearch.Request()
+        searchRequest.naturalLanguageQuery = searchBar.text
 
-            let activeSearch = MKLocalSearch(request: searchRequest)
+        let activeSearch = MKLocalSearch(request: searchRequest)
                 
-            activeSearch.start { response, _ in
-                self.hideActivityIndicator(indicator: self.activityIndicator)
-                self.view.isUserInteractionEnabled = true
+        activeSearch.start { response, _ in
+            self.hideActivityIndicator(indicator: self.activityIndicator)
+            self.view.isUserInteractionEnabled = true
                 
-                if response == nil {
-                    self.showMapAlert()
-                } else {
-                    let annotations = self.mapViewMap.annotations
-                    self.mapViewMap.removeAnnotations(annotations)
-                    
-                    guard let coordinates = response?.boundingRegion.center else { return }
-                    
-                    self.viewModel.setNewPickedLocation(coordinate: coordinates, completion: self.checkResponse)
+            if response == nil {
+                self.showMapAlert()
+            } else {
+                guard let coordinates = response?.boundingRegion.center else { return }
+                
+                self.viewModel.setNewPickedLocation(coordinate: coordinates) { result in
+                    switch result {
+                    case .failure:
+                        self.showAlert(title: "Error",
+                                       message: "Can't load city. Please, try again",
+                                       actionText: "Ok. I got it")
+                        
+                    case .success:
+                        self.showCityMenu()
+                    }
                 }
+                
+                self.mapView.updateMap(coordinates: coordinates)
             }
         }
     }
@@ -159,6 +118,40 @@ extension MapFieldViewController: UISearchBarDelegate {
         showAlert(title: "Error",
                   message: "Can't find the place. Please, try another",
                   actionText: "Ok. I got it")
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        self.workItemForSearch?.cancel()
+        
+        guard let text = searchBar.text else { return }
+        
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.performSearch(text)
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: workItem)
+        self.workItemForSearch = workItem
+        
+    }
+    
+    func performSearch(_ text: String) {
+        mapViewSearchBar.isLoading = true
+        
+        let searchRequest = MKLocalSearch.Request()
+        searchRequest.naturalLanguageQuery = mapViewSearchBar.text
+        
+        let activeSearch = MKLocalSearch(request: searchRequest)
+        
+        activeSearch.start { response, _ in
+            self.mapViewSearchBar.isLoading = false
+            
+            guard let coordinates = response?.boundingRegion.center else { return }
+            
+            self.viewModel.setNewPickedLocation(coordinate: coordinates) { _ in
+                return
+            }
+        }
     }
     
 }
@@ -208,6 +201,25 @@ extension MapFieldViewController {
     
 }
 
-protocol MapFieldViewDelegate: class {
+extension MapFieldViewController: MapFieldViewDelegate {
+    
+    func userTappedOnMap(at coordinate: CLLocationCoordinate2D) {
+        self.view.endEditing(true)
+        viewModel.setNewPickedLocation(coordinate: coordinate) { result in
+            switch result {
+            case .failure:
+                self.showAlert(title: "Error",
+                               message: "Can't load city. Please, try again",
+                               actionText: "Ok. I got it")
+                
+            case .success:
+                self.showCityMenu()
+            }
+        }
+    }
+    
+}
+
+protocol MapFieldViewControllerDelegate: class {
     func viewWillAppear()
 }

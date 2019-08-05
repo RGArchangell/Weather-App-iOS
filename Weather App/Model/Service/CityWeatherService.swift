@@ -26,15 +26,6 @@ class CityWeatherService {
                  parameters: parameters,
                  completion: completion)
     }
-
-    /*cityWeatherService.obtainCityData(cityName: nameOfCity) { [weak self] result in
-     switch result {
-     case .sucess(let city):
-     self?.loadScreen(cityData: city)
-     case .failure(let error):
-     print("error while loading city data: \(error)")
-     }
-     }*/
     
     func loadData<T>(url: URL, parameters: [String: Any], completion: @escaping (RequestResult<T>) -> Void) where T: Decodable {
         
