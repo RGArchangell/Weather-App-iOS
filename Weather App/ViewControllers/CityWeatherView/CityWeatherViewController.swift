@@ -74,11 +74,11 @@ class CityWeatherViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        self.showActivityIndicator(indicator: activityIndicator)
         viewModel.delegate = self
         informationView.isHidden = true
         
         delegate?.cityForecastViewWillAppear()
-        self.showActivityIndicator(indicator: activityIndicator)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
