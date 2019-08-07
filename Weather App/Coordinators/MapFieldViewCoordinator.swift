@@ -64,9 +64,9 @@ extension MapFieldViewCoordinator: MapFieldViewControllerDelegate {
 }
 
 extension MapFieldViewCoordinator: CityWeatherForecastCoordinatorDelegate {
-
-    func removeCoordinator(childCoordinator: Coordinator) {
-        removeChildCoordinator(childCoordinator)
+    
+    func сoordinatorDidFinish(_ сoordinator: Coordinator) {
+        removeChildCoordinator(сoordinator)
     }
     
 }

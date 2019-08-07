@@ -18,7 +18,6 @@
 		842BE18E22F7138B00B279C7 /* MapFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842BE18D22F7138B00B279C7 /* MapFieldView.swift */; };
 		842BE19322F7F82400B279C7 /* UISearchBarExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842BE19222F7F82400B279C7 /* UISearchBarExtensions.swift */; };
 		84613F0B22F0711700C82EC4 /* GeocodeFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84613F0A22F0711700C82EC4 /* GeocodeFunction.swift */; };
-		84613F0E22F07C8E00C82EC4 /* DecodeCityFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84613F0D22F07C8E00C82EC4 /* DecodeCityFunction.swift */; };
 		84613F1522F0B11400C82EC4 /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84613F1422F0B11400C82EC4 /* UIViewControllerExtensions.swift */; };
 		8467BDF822F34E0D00431CE2 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8467BDF722F34E0D00431CE2 /* MainCoordinator.swift */; };
 		84D8E67322E07D9F00A0891B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D8E67222E07D9F00A0891B /* AppDelegate.swift */; };
@@ -55,7 +54,6 @@
 		842BE18D22F7138B00B279C7 /* MapFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapFieldView.swift; sourceTree = "<group>"; };
 		842BE19222F7F82400B279C7 /* UISearchBarExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UISearchBarExtensions.swift; sourceTree = "<group>"; };
 		84613F0A22F0711700C82EC4 /* GeocodeFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodeFunction.swift; sourceTree = "<group>"; };
-		84613F0D22F07C8E00C82EC4 /* DecodeCityFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeCityFunction.swift; sourceTree = "<group>"; };
 		84613F1422F0B11400C82EC4 /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensions.swift; sourceTree = "<group>"; };
 		8467BDF722F34E0D00431CE2 /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
 		84D8E66F22E07D9F00A0891B /* Weather App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Weather App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -149,7 +147,6 @@
 			isa = PBXGroup;
 			children = (
 				84613F0A22F0711700C82EC4 /* GeocodeFunction.swift */,
-				84613F0D22F07C8E00C82EC4 /* DecodeCityFunction.swift */,
 			);
 			path = "Public Functions";
 			sourceTree = "<group>";
@@ -436,7 +433,6 @@
 				841E1F9A22E72EBC00B5C626 /* AppId.swift in Sources */,
 				84DA542622E3E0A7006FAF14 /* MapFieldViewCoordinator.swift in Sources */,
 				84DA541622E34D6C006FAF14 /* Coordinator.swift in Sources */,
-				84613F0E22F07C8E00C82EC4 /* DecodeCityFunction.swift in Sources */,
 				8467BDF822F34E0D00431CE2 /* MainCoordinator.swift in Sources */,
 				842BE19322F7F82400B279C7 /* UISearchBarExtensions.swift in Sources */,
 				841E1F9322E727E600B5C626 /* CityWeatherService.swift in Sources */,

@@ -9,6 +9,11 @@
 import Foundation
 import Alamofire
 
+enum RequestResult<T> {
+    case sucess(T)
+    case failure(Error)
+}
+
 class CityWeatherService {
     
     private enum Constants {
@@ -39,9 +44,15 @@ class CityWeatherService {
                     
                     switch response.result {
                     case .success(let data):
-                        guard let cityData = decodeCityFromData(data: data) else { return }
-                        guard let result = cityData as? T else { return }
-                        completion(.sucess(result))
+                        
+                        do {
+                            let decoder = JSONDecoder()
+                            let decodedData = try decoder.decode(T.self, from: data)
+                            completion(.sucess(decodedData))
+                            
+                        } catch let error {
+                            completion(.failure(error))
+                        }
                         
                     case .failure(let error):
                         completion(.failure(error))
@@ -51,9 +62,4 @@ class CityWeatherService {
     
     }
     
-}
-
-enum RequestResult<T> {
-    case sucess(T)
-    case failure(Error)
 }

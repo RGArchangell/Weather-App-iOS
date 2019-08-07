@@ -9,6 +9,10 @@
 import UIKit
 import MapKit
 
+protocol MapFieldViewDelegate: class {
+    func userTappedOnMap(at coordinate: CLLocationCoordinate2D)
+}
+
 class MapFieldView: UIView {
     @IBOutlet private var contentView: UIView!
     @IBOutlet private weak var map: MKMapView!
@@ -73,8 +77,4 @@ class MapFieldView: UIView {
         addPin(coordinate: tappedCoordinate)
     }
     
-}
-
-protocol MapFieldViewDelegate: class {
-    func userTappedOnMap(at coordinate: CLLocationCoordinate2D)
 }

@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol CityMenuViewDelegate: class {
+    func didRequestInformationOfCity()
+}
+
 class CityMenuView: UIView {
 
     @IBOutlet private weak var name: UILabel!
@@ -72,11 +76,5 @@ class CityMenuView: UIView {
     @IBAction private func showCityButtonTapped(_ sender: UIButton) {
         delegate?.didRequestInformationOfCity()
     }
-    
-}
-
-protocol CityMenuViewDelegate: class {
-    
-    func didRequestInformationOfCity()
     
 }

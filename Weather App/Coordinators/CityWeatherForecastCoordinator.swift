@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol CityWeatherForecastCoordinatorDelegate: class {
+    func сoordinatorDidFinish(_ сoordinator: Coordinator)
+}
+
 class CityWeatherForecastCoordinator: Coordinator {
     
     private let rootViewController: UINavigationController
@@ -43,7 +47,7 @@ class CityWeatherForecastCoordinator: Coordinator {
     }
     
     private func viewDidDisappear() {
-        delegate?.removeCoordinator(childCoordinator: self)
+        delegate?.сoordinatorDidFinish(self)
     }
     
 }
@@ -57,11 +61,5 @@ extension CityWeatherForecastCoordinator: CityWeatherForecastViewDelegate {
     func cityForecastViewDidDisappear() {
         viewDidDisappear()
     }
-    
-}
-
-protocol CityWeatherForecastCoordinatorDelegate: class {
-    
-    func removeCoordinator(childCoordinator: Coordinator)
     
 }

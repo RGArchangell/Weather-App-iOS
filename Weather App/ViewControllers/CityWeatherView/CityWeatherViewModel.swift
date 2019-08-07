@@ -9,6 +9,10 @@
 import Foundation
 import UIKit
 
+protocol CityWeatherViewModelDelegate: class {
+    func dataWasUpdated(result: Result<Int, Error>)
+}
+
 class CityWeatherViewModel {
     
     // MARK: - Variables
@@ -87,8 +91,4 @@ class CityWeatherViewModel {
         return url
     }
     
-}
-
-protocol CityWeatherViewModelDelegate: class {
-    func dataWasUpdated(result: Result<Int, Error>)
 }

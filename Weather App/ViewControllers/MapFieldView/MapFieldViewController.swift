@@ -9,6 +9,15 @@
 import UIKit
 import MapKit
 
+protocol MapFieldViewControllerDelegate: class {
+    func viewWillAppear()
+}
+
+enum SearchResult {
+    case sucess(coordinates: CLLocationCoordinate2D)
+    case failure
+}
+
 class MapFieldViewController: UIViewController {
 
     // MARK: - IBOutlets
@@ -83,22 +92,15 @@ extension MapFieldViewController: UISearchBarDelegate {
         self.view.isUserInteractionEnabled = false
         self.showActivityIndicator(indicator: self.activityIndicator)
                 
-        let searchRequest = MKLocalSearch.Request()
-        searchRequest.naturalLanguageQuery = searchBar.text
-
-        let activeSearch = MKLocalSearch(request: searchRequest)
-                
-        activeSearch.start { response, _ in
-            self.hideActivityIndicator(indicator: self.activityIndicator)
+        performSearch(searchBar.text) { result in
             self.view.isUserInteractionEnabled = true
+            self.hideActivityIndicator(indicator: self.activityIndicator)
+            switch result {
                 
-            if response == nil {
-                self.showMapAlert()
-            } else {
-                guard let coordinates = response?.boundingRegion.center else { return }
-                
+            case .sucess(let coordinates):
                 self.viewModel.setNewPickedLocation(coordinate: coordinates) { result in
                     switch result {
+                        
                     case .failure:
                         self.showAlert(title: "Error",
                                        message: "Can't load city. Please, try again",
@@ -107,9 +109,12 @@ extension MapFieldViewController: UISearchBarDelegate {
                     case .success:
                         self.showCityMenu()
                     }
+                    
+                    self.mapView.updateMap(coordinates: coordinates)
                 }
                 
-                self.mapView.updateMap(coordinates: coordinates)
+            case .failure:
+                self.showMapAlert()
             }
         }
     }
@@ -127,7 +132,14 @@ extension MapFieldViewController: UISearchBarDelegate {
         guard let text = searchBar.text else { return }
         
         let workItem = DispatchWorkItem { [weak self] in
-            self?.performSearch(text)
+            self?.performSearch(text) { result in
+                switch result {
+                case .sucess(let coordinates):
+                    self?.viewModel.setNewPickedLocation(coordinate: coordinates, completion: nil)
+                case .failure:
+                    return
+                }
+            }
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: workItem)
@@ -135,7 +147,7 @@ extension MapFieldViewController: UISearchBarDelegate {
         
     }
     
-    func performSearch(_ text: String) {
+    func performSearch(_ text: String?, completion: @escaping (SearchResult) -> Void) {
         mapViewSearchBar.isLoading = true
         
         let searchRequest = MKLocalSearch.Request()
@@ -146,10 +158,14 @@ extension MapFieldViewController: UISearchBarDelegate {
         activeSearch.start { response, _ in
             self.mapViewSearchBar.isLoading = false
             
-            guard let coordinates = response?.boundingRegion.center else { return }
-            
-            self.viewModel.setNewPickedLocation(coordinate: coordinates) { _ in
-                return
+            if response == nil {
+                completion(.failure)
+            } else {
+                guard let coordinates = response?.boundingRegion.center else {
+                    completion(.failure)
+                    return
+                }
+                completion(.sucess(coordinates: coordinates))
             }
         }
     }
@@ -218,8 +234,4 @@ extension MapFieldViewController: MapFieldViewDelegate {
         }
     }
     
-}
-
-protocol MapFieldViewControllerDelegate: class {
-    func viewWillAppear()
 }

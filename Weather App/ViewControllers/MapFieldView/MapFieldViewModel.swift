@@ -9,6 +9,10 @@
 import Foundation
 import MapKit
 
+protocol MapFieldViewModelDelegate: class {
+    func didRequestShowWeatherForCity(city: String)
+}
+
 class MapFieldViewModel {
     
     // MARK: - Variables
@@ -78,7 +82,7 @@ class MapFieldViewModel {
         }
     }
     
-    func setNewPickedLocation(coordinate: CLLocationCoordinate2D, completion: @escaping (Result<Int, Error>) -> Void) {
+    func setNewPickedLocation(coordinate: CLLocationCoordinate2D, completion: ((Result<Int, Error>) -> Void)?) {
         let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         self.location = location
         
@@ -88,10 +92,10 @@ class MapFieldViewModel {
                 guard let placemark = placemark else { return }
                     
                 self.setNewCity(placemark: placemark)
-                completion(.success(1))
+                completion?(.success(1))
                 
             case .failure(let error):
-                completion(.failure(error))
+                completion?(.failure(error))
             }
         }
     }
@@ -108,11 +112,5 @@ extension MapFieldViewModel: CityMenuViewDelegate {
     func didRequestInformationOfCity() {
         goToCityForecast()
     }
-    
-}
-
-protocol MapFieldViewModelDelegate: class {
-    
-    func didRequestShowWeatherForCity(city: String)
     
 }

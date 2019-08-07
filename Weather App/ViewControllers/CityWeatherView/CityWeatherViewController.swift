@@ -9,6 +9,11 @@
 import UIKit
 import Kingfisher
 
+protocol CityWeatherForecastViewDelegate: class {
+    func cityForecastViewWillAppear()
+    func cityForecastViewDidDisappear()
+}
+
 class CityWeatherViewController: UIViewController {
     
     // MARK: - IBOutlets
@@ -100,12 +105,5 @@ extension CityWeatherViewController: CityWeatherViewModelDelegate {
             showError()
         }
     }
-    
-}
-
-protocol CityWeatherForecastViewDelegate: class {
-    
-    func cityForecastViewWillAppear()
-    func cityForecastViewDidDisappear()
     
 }
