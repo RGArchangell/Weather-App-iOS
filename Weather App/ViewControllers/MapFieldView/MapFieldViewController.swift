@@ -223,6 +223,7 @@ extension MapFieldViewController: MapFieldViewDelegate {
         self.view.endEditing(true)
         viewModel.setNewPickedLocation(coordinate: coordinate) { result in
             switch result {
+                
             case .failure:
                 self.showAlert(title: "Error",
                                message: "Can't load city. Please, try again",
@@ -230,6 +231,7 @@ extension MapFieldViewController: MapFieldViewDelegate {
                 
             case .success:
                 self.showCityMenu()
+                
             }
         }
     }
